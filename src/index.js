@@ -39,14 +39,14 @@ global.db = db
 
 
 // Define our application-specific data
-app.locals.shopData = {shopName: "Bettys Books"}
+app.locals.shopData = {shopName: "irecipe", tagline: "The best place to find recipes"}
 
 // Load the route handlers
-const mainRoutes = require("./routes/main")
+const mainRoutes = require("./js/main")
 app.use('/', mainRoutes)
 
 // Load the route handlers for /users
-const usersRoutes = require('./routes/users')
+const usersRoutes = require('./js/users')
 app.use('/users', usersRoutes)
 
 // Load the route handlers for /books
