@@ -38,20 +38,20 @@ app.use(session({
 
 
 // Define the database connection
-const db = mysql.createConnection ({
-    host: 'localhost',
-    user: 'bettys_books_app',
-    password: 'qwertyuiop',
-    database: 'bettys_books'
-})
-// Connect to the database
-db.connect((err) => {
-    if (err) {
-        throw err
-    }
-    console.log('Connected to database')
-})
-global.db = db
+// const db = mysql.createConnection ({
+//     host: 'localhost',
+//     user: 'bettys_books_app',
+//     password: 'qwertyuiop',
+//     database: 'bettys_books'
+// })
+// // Connect to the database
+// db.connect((err) => {
+//     if (err) {
+//         throw err
+//     }
+//     console.log('Connected to database')
+// })
+// global.db = db
 
 
 
@@ -67,7 +67,7 @@ const usersRoutes = require('./routes/users')
 app.use('/users', usersRoutes)
 
 // Load the route handlers for /books
-const booksRoutes = require('./routes/books')
+const booksRoutes = require('./routes/recipe')
 app.use('/books', booksRoutes)
 
 
