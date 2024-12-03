@@ -38,25 +38,25 @@ app.use(session({
 
 
 // Define the database connection
-// const db = mysql.createConnection ({
-//     host: 'localhost',
-//     user: 'bettys_books_app',
-//     password: 'qwertyuiop',
-//     database: 'bettys_books'
-// })
-// // Connect to the database
-// db.connect((err) => {
-//     if (err) {
-//         throw err
-//     }
-//     console.log('Connected to database')
-// })
-// global.db = db
+const db = mysql.createConnection ({
+    host: 'localhost',
+    user: 'irecipe_app',
+    password: 'qwertyuiop',
+    database: 'irecipe'
+})
+// Connect to the database
+db.connect((err) => {
+    if (err) {
+        throw err
+    }
+    console.log('Connected to database')
+})
+global.db = db
 
 
 
 // Define our application-specific data
-app.locals.shopData = {shopName: "Bettys Books"}
+app.locals.shopData = {shopName: "IRecipe"}
 
 // Load the route handlers
 const mainRoutes = require("./routes/main")
