@@ -108,13 +108,13 @@ router.post('/login', [
 });
 
 router.get('/list', redirectLogin, function(req, res, next) {
-    let sqlquery = "SELECT * FROM users" // query database to get all the books
+    let sqlquery = "SELECT * FROM Recipes" // query database to get all the books
     // execute sql query
     db.query(sqlquery, (err, result) => {
         if (err) {
             next(err)
         }
-        res.render("users.ejs", {availableUsers:result})
+        res.render("list.ejs", {availableRecipe:result})
      })
 })
 
