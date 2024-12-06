@@ -5,11 +5,13 @@
     <link rel="stylesheet"  type="text/css" href="/main.css" />
   </head>
   <body>
+    <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
+
     <h1>Welcome to <%=shopData.shopName%></h1>
-    <p><a href="about">About <%=shopData.shopName%></a></p>
-    <p><a href="users/login">Login</a></p>
-    <p><a href="users/register">Register</a></p>
-    <p><a href="users/list">List</a></p>
+    <p><a href="/about">About <%=shopData.shopName%></a></p>
+    <p><a href="/users/login">Login</a></p>
+    <p><a href="/users/register">Register</a></p>
+    <p><a href="../recipes/list">List</a></p>
 
   </body>
 </html>

@@ -36,6 +36,12 @@ app.use(session({
     }
 }))
 
+// Middleware to make `user` available in all templates
+app.use((req, res, next) => {
+    res.locals.user = req.session.userId || null; // Pass userId or null if not logged in
+    next();
+  });
+
 
 // Define the database connection
 const db = mysql.createConnection ({
@@ -67,8 +73,8 @@ const usersRoutes = require('./routes/users')
 app.use('/users', usersRoutes)
 
 // Load the route handlers for /books
-const booksRoutes = require('./routes/recipe')
-app.use('/books', booksRoutes)
+const recipesRoutes = require('./routes/recipes')
+app.use('/recipes', recipesRoutes)
 
 
 // Start the web app listening

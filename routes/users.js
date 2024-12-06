@@ -8,7 +8,7 @@ const { check, validationResult } = require('express-validator');
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.userId ) {
-      res.redirect('./login') // redirect to the login page
+      res.redirect('.../users/login') // redirect to the login page
     } else { 
         next (); // move to the next middleware function
     } 
@@ -106,21 +106,6 @@ router.post('/login', [
         next(err);
     }
 });
-
-router.get('/list', redirectLogin, function(req, res, next) {
-    let sqlquery = "SELECT * FROM Recipes" // query database to get all the books
-    // execute sql query
-    db.query(sqlquery, (err, result) => {
-        if (err) {
-            next(err)
-        }
-        res.render("list.ejs", {availableRecipe:result})
-     })
-})
-
-router.get('/users', function(req, res, next) {
-    res.redirect('/')    
-})
 
 router.get('/logout', redirectLogin, (req,res) => {
     req.session.destroy(err => {

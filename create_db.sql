@@ -19,8 +19,7 @@ CREATE TABLE IF NOT EXISTS Recipes (
     ingredients TEXT,
     instructions TEXT,
     external_id VARCHAR(100),
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    user_id INT
 );
 
 # Create the app user
