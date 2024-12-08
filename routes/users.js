@@ -8,7 +8,7 @@ const { check, validationResult } = require('express-validator');
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.userId ) {
-      res.redirect('.../users/login') // redirect to the login page
+      res.redirect('./login') // redirect to the login page
     } else { 
         next (); // move to the next middleware function
     } 
@@ -52,7 +52,7 @@ router.post('/register', [
             db.query(sqlQuery, values, (err, result) => {
                 if (err) return next(err);
 
-                res.status(201).send(`User ${name} registered successfully!`);
+                res.redirect('../users/login');
             });
         });
     } catch (err) {
@@ -100,7 +100,7 @@ router.post('/login', [
             // Assuming you have session management (e.g., express-session)
             req.session.userId = user.user_id;
 
-            res.send(`Welcome back, ${user.name}!`);
+            res.redirect('/'); // Redirect to the home page
         });
     } catch (err) {
         next(err);

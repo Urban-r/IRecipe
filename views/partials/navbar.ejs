@@ -2,11 +2,17 @@
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="/about">About</a></li>
-      <li><a href="../recipes/list">Saved recipes</a></li>
       <% if (user) { %>
-        <li><a href="users/logout">Logout</a></li>
+        <li><a href="../users/logout">Logout</a></li>
+        <li><a href="../recipes/list">Saved recipes</a></li>
+        <li><a href="../recipes/search">Search recipes</a></li>
+        <p><a href="../recipes/my-recipes">Add</a></p>
+        <p><a href="../recipes/api-recipes">API recipe search</a></p>
+
+        <>
       <% } else { %>
-        <li><a href="users/login">Login</a></li>
+        <li><a href="../users/login">Login</a></li>
+        <li><a href="../users/register">Register</a></li>
       <% } %>
     </ul>
   </nav>

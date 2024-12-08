@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Recipes</title>
+  <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+    <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
+
+  <h1>My Saved Recipes</h1>
+  <ul>
+    <% if (recipes.length > 0) { %>
+      <% recipes.forEach(recipe => { %>
+        <li>
+          <h2><%= recipe.title %></h2>
+          <p><strong>Ingredients:</strong> <%= recipe.ingredients %></p>
+          <p><strong>Instructions:</strong> <%= recipe.instructions %></p>
+        </li>
+      <% }); %>
+    <% } else { %>
+      <p>You haven't saved any recipes yet.</p>
+    <% } %>
+  </ul>
+  <a href="/recipe/add-recipe">Add a Recipe</a>
+</body>
+</html>

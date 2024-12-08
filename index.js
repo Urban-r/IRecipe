@@ -48,7 +48,10 @@ const db = mysql.createConnection ({
     host: 'localhost',
     user: 'irecipe_app',
     password: 'qwertyuiop',
-    database: 'irecipe'
+    database: 'irecipe',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
 })
 // Connect to the database
 db.connect((err) => {
@@ -57,7 +60,7 @@ db.connect((err) => {
     }
     console.log('Connected to database')
 })
-global.db = db
+global.db = db;
 
 
 
