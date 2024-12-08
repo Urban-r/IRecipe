@@ -17,9 +17,17 @@
     <ul>
       <% recipes.forEach(recipe => { %>
         <li>
-          <h3><a href="<%= recipe.sourceUrl %>" target="_blank"><%= recipe.title %></a></h3>
-          <img src="<%= recipe.image %>" alt="<%= recipe.title %>" width="100">
-          <p><%= recipe.summary %></p>
+            <h3><a href="<%= recipe.sourceUrl %>" target="_blank"><%= recipe.title %></a></h3>
+            <img src="<%= recipe.image %>" alt="<%= recipe.title %>" width="100">
+            <p><%= recipe.summary %></p>
+            <!-- Form to save recipe -->
+            <form action="/recipes/save" method="POST">
+            <input type="hidden" name="title" value="<%= recipe.title %>">
+            <input type="hidden" name="ingredients" value="<%= recipe.ingredients || '' %>">
+            <input type="hidden" name="instructions" value="<%= recipe.instructions || '' %>">
+            <input type="hidden" name="external_id" value="<%= recipe.id %>">
+            <button type="submit">Save Recipe</button>
+      </form>
         </li>
       <% }) %>
     </ul>
