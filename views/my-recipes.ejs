@@ -15,14 +15,19 @@
       <% recipes.forEach(recipe => { %>
         <li>
           <h2><%= recipe.title %></h2>
-          <p><strong>Ingredients:</strong> <%= recipe.ingredients %></p>
-          <p><strong>Instructions:</strong> <%= recipe.instructions %></p>
+            <p><strong>Ingredients:</strong></p>
+            <ul>
+              <% recipe.ingredients.replace(/["[\]]/g, '').split(',').forEach(ingredient => { %>
+              <li>&#8226; <%= ingredient.trim() %></li>
+              <% }); %>
+            </ul>
+            <p><strong>Instructions:</strong> <%- recipe.instructions %></p>
         </li>
       <% }); %>
     <% } else { %>
       <p>You haven't saved any recipes yet.</p>
     <% } %>
   </ul>
-  <a href="/recipe/add-recipe">Add a Recipe</a>
+  <a href="/recipes/api-recipes">Add a Recipe</a>
 </body>
 </html>

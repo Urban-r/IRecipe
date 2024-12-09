@@ -7,6 +7,8 @@ const { check, validationResult } = require('express-validator');
 // Spoonacular API key and base URL
 const API_KEY = 'e2eed91c761e4c34947edc8bd161a543';
 const BASE_URL = 'https://api.spoonacular.com/recipes/complexSearch';
+const RECIPE_URL = 'https://api.spoonacular.com/recipes/{id}/information';
+var global_recipe_id = 0;
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.userId ) {
@@ -51,26 +53,6 @@ router.get('/search_result', (req, res) => {
     );
   });
 
-  router.post('/save-recipe', async (req, res) => {
-    const { title, ingredients, instructions } = req.body;
-    const userId = req.session.userId; 
-  
-    if (!userId) {
-      return res.status(401).send('You must be logged in to save a recipe.');
-    }
-  
-    try {
-      await db.execute(
-        'INSERT INTO Recipes (title, ingredients, instructions, user_id) VALUES (?, ?, ?, ?)',
-        [title, ingredients, instructions, userId]
-      );
-      res.redirect('/my-recipes'); // Redirect to the saved recipes page
-    } catch (error) {
-      console.error('Error saving recipe:', error);
-      res.status(500).send('An error occurred while saving the recipe.');
-    }
-  });
-
   router.get('/my-recipes', (req, res) => {
     const userId = req.session.userId; // Get userId from session
   
@@ -101,65 +83,107 @@ router.get('/search_result', (req, res) => {
   
 // Route to handle search
 router.get('/api-recipes', async (req, res) => {
-    const query = req.query.query; // Get the query from the search form
+  const query = req.query.query || 'Please enter a search term.'; // Get the query from the search form
   
-    if (!query) {
-      return res.render('api-recipes.ejs', { recipes: [], message: 'Please enter a search term.' });
-    }
+  if (!query) {
+    return res.render('api-recipes.ejs', { recipes: [], query: query });
+  }
   
+    // Make an API request to Spoonacular
     try {
-      // Make a request to the Spoonacular API with the query
       const response = await axios.get(BASE_URL, {
         params: {
-          query: query, // Search term
-          apiKey: API_KEY, // Spoonacular API key
-          number: 10 // Number of results to return
+          apiKey: API_KEY,
+          query: query,
+          number: 10
         }
       });
   
-      // Check if recipes are found
-      const recipes = response.data.results;
-  
-      // Render the search results page with the data
+      const recipes = response.data.results; // Get the recipes from the response
       console.log(recipes);
-      res.render('api-recipes.ejs', { recipes: recipes });
+      
+      if (!recipes || recipes.length === 0) {
+        return res.render('api-recipes.ejs', { recipes: [], query, message: 'No recipes found.' });
+      }
+  
+      // Render the search.ejs page with the results
+      res.render('api-recipes.ejs', { recipes, query });
     } catch (error) {
-      console.error('Error fetching data from Spoonacular:', error);
-      res.status(500).send('An error occurred while fetching recipes.');
+      console.error('Error searching for recipes:', error);
+      res.status(500).send('An error occurred while searching for recipes.'+ error);
     }
   });
-  
-  router.post('/save', async (req, res) => {
-    const { title, ingredients, instructions, external_id } = req.body;
-    const userId = req.session.userId; // Get the logged-in user ID
+  // Route to get detailed recipe information
 
-    if (!userId) {
-        return res.status(401).send('You must be logged in to save recipes.');
-    }
-
+  router.get('/:id', redirectLogin, async (req, res) => {
+    const recipeId = req.params.id; // Get recipeId from the URL parameter
+    global_recipe_id = recipeId;
+    console.log(recipeId);
+    
     try {
-        const [existingRecipe] = await db.query(
-            'SELECT * FROM Recipes WHERE external_id = ? AND user_id = ?',
-            [external_id, userId]
-        );
-
-        if (existingRecipe.length > 0) {
-            // Recipe already saved, redirect to saved recipes page
-            return res.redirect('/recipe/saved');
-        }
-
-        // Save the recipe to the database
-        await db.query(
-            'INSERT INTO Recipes (title, ingredients, instructions, external_id, user_id) VALUES (?, ?, ?, ?, ?)',
-            [title, ingredients, instructions, external_id, userId]
-        );
-
-        res.redirect('/recipes/my-recipes'); // Redirect to saved recipes page or back to search
+        // Make an API request to Spoonacular to get detailed recipe information
+        const response = await axios.get(RECIPE_URL.replace('{id}', recipeId), {
+            params: {
+                apiKey: API_KEY
+            }
+        });
+    
+        const recipe = response.data; // Get the recipe details from the response
+        console.log(".......");
+        console.log(recipe);
+    
+        // Extract the required information
+        const recipeDetails = {
+            id: recipe.id,
+            title: recipe.title,
+            ingredients: recipe.extendedIngredients.map(ingredient => ingredient.original),
+            instructions: recipe.instructions
+        };
+    
+        // Render a page to display the recipe details
+        res.render('recipe-details.ejs', { recipe: recipeDetails });
     } catch (error) {
-        console.error('Error saving recipe:', error);
-        res.status(500).send('An error occurred while saving the recipe.');
+        console.error('Error fetching recipe details:', error);
+        res.status(500).send('An error occurred while fetching the recipe details.');
     }
 });
+  //route for saving recipes
+
+  router.post('/save-recipe', redirectLogin, async (req, res) => {
+    const userId = req.session.userId;
+    const recipeId = global_recipe_id;
+
+    // get the recipe details from the API
+    const response = await axios.get(RECIPE_URL.replace('{id}', recipeId), {
+        params: {
+            apiKey: API_KEY
+        }
+    });
+
+    const recipe = response.data;
+
+    // Extract the required information
+    const recipeDetails = {
+        id: recipe.id,
+        title: recipe.title,
+        ingredients: recipe.extendedIngredients.map(ingredient => ingredient.original),
+        instructions: recipe.instructions
+    };
+
+    // Save the recipe to the database
+    db.query(
+        'INSERT INTO Recipes (user_id, recipe_id, title, ingredients, instructions) VALUES (?, ?, ?, ?, ?)',
+        [userId, recipeDetails.id, recipeDetails.title, JSON.stringify(recipeDetails.ingredients), recipeDetails.instructions],
+        (err, result) => {
+            if (err) {
+                console.error('Error saving recipe:', err);
+                return res.status(500).send('An error occurred while saving the recipe.');
+            }
+
+            res.redirect('/recipes/my-recipes');
+        }
+    );
+  });
     
 // Export the router object so index.js can access it
 module.exports = router

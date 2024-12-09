@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title><%= recipe.title %></title>
+      <link rel="stylesheet" type="text/css" href="/main.css" />
+    </head>
+    <body>
+      <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
+      <h1><%= recipe.title %></h1>
+      <h2>Ingredients</h2>
+      <ul>
+        <% recipe.ingredients.forEach(function(ingredient) { %>
+          <li><%= ingredient %></li>
+        <% }); %>
+      </ul>
+      <h2>Instructions</h2>
+      <p><%= recipe.instructions %></p>
+        <!-- Form to save recipe -->
+        <form action="/recipes/save-recipe" method="POST">
+            <input type="hidden" name="recipe_id" value="<%= recipe.id %>">
+            <input type="hidden" name="title" value="<%= recipe.title %>">
+            <input type="hidden" name="ingredients" value="<%= recipe.ingredients || '' %>">
+            <input type="hidden" name="instructions" value="<%= recipe.instructions || '' %>">
+            <input type="hidden" name="external_id" value="<%= recipe.id %>">
+            <button type="submit">Save Recipe</button>
+        </form>
+    </body>
+    </html>
