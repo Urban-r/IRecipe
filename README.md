@@ -1,4 +1,4 @@
-# Database and Web
+# IRecipe
  coursework for module
 
  Spooncular API had 150 API calls a day and is going under maintance so clicking repeatedly is recommended
