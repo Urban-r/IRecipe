@@ -12,11 +12,11 @@
       <h2>Ingredients</h2>
       <ul>
         <% recipe.ingredients.forEach(function(ingredient) { %>
-          <li><%= ingredient %></li>
+          <li>&#8226;<%= ingredient %></li>
         <% }); %>
       </ul>
       <h2>Instructions</h2>
-      <p><%= recipe.instructions %></p>
+      <p><%- recipe.instructions %></p>
         <!-- Form to save recipe -->
         <form action="/recipes/save-recipe" method="POST">
             <input type="hidden" name="recipe_id" value="<%= recipe.id %>">

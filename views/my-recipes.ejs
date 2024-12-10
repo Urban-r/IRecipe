@@ -23,11 +23,16 @@
             </ul>
             <p><strong>Instructions:</strong> <%- recipe.instructions %></p>
         </li>
+        <form action="/recipes/delete-recipe" method="POST">
+          <input type="hidden" name="recipeId" value="<%= recipe.recipe_id %>">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
       <% }); %>
     <% } else { %>
       <p>You haven't saved any recipes yet.</p>
     <% } %>
   </ul>
+  
   <a href="/recipes/api-recipes">Add a Recipe</a>
 </body>
 </html>

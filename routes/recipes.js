@@ -65,6 +65,7 @@ router.get('/search_result', (req, res) => {
       'SELECT * FROM Recipes WHERE user_id = ?',
       [userId],
       (err, rows) => { // Callback to handle the result or error
+        console.log(rows);
         if (err) {
           console.error('Error fetching recipes:', err);
           return res.status(500).send('An error occurred while fetching your recipes.');
@@ -174,7 +175,7 @@ router.get('/api-recipes', async (req, res) => {
     db.query(
         'INSERT INTO Recipes (user_id, recipe_id, title, ingredients, instructions) VALUES (?, ?, ?, ?, ?)',
         [userId, recipeDetails.id, recipeDetails.title, JSON.stringify(recipeDetails.ingredients), recipeDetails.instructions],
-        (err, result) => {
+        (err) => {
             if (err) {
                 console.error('Error saving recipe:', err);
                 return res.status(500).send('An error occurred while saving the recipe.');
@@ -184,6 +185,26 @@ router.get('/api-recipes', async (req, res) => {
         }
     );
   });
+  // router to post delete button
+  router.post('/delete-recipe', redirectLogin, (req, res) => {
+    const userId = req.session.userId;
+    const recipeId = req.body.recipeId;
+  
+    // Delete the recipe from the database
+    db.query(
+      'DELETE FROM Recipes WHERE user_id = ? AND recipe_id = ?',
+      [userId, recipeId],
+      (err, result) => {
+        if (err) {
+          console.error('Error deleting recipe:', err);
+          return res.status(500).send('An error occurred while deleting the recipe.');
+        }
+  
+        res.redirect('/recipes/my-recipes');
+      }
+    );
+  });
+  
     
 // Export the router object so index.js can access it
 module.exports = router

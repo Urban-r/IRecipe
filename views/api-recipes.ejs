@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text/css" href="/main.css" />
 </head>
 <body>
+  <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
   <h1>Search for Recipes</h1>
   <form action="../recipes/api-recipes" method="GET">
     <input type="text" name="query" placeholder="Search recipes..." required>
