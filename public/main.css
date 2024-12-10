@@ -180,3 +180,85 @@ body {
       width: 90%;
     }
   }
+
+  /* Recipe Tiles Container */
+.recipe-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  gap: 20px; /* Spacing between tiles */
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto; /* Center the grid */
+}
+
+/* Individual Recipe Tile */
+.recipe-tile {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recipe-tile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Recipe Title */
+.recipe-tile h2 {
+  font-size: 1.25rem;
+  margin: 10px 0;
+  color: #333;
+}
+
+/* Recipe Ingredients */
+.recipe-tile ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.recipe-tile ul li {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Delete Button */
+.recipe-tile button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.recipe-tile button:hover {
+  background-color: #c0392b;
+}
+
+/* Add Recipe Link */
+.add-recipe {
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  font-size: 1rem;
+  color: white;
+  background-color: #4CAF50;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  max-width: 200px;
+}
+
+.add-recipe:hover {
+  background-color: #45a049;
+}

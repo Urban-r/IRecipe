@@ -10,29 +10,30 @@
     <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
 
   <h1>My Saved Recipes</h1>
-  <ul>
+  <div class="recipe-tiles">
     <% if (recipes.length > 0) { %>
       <% recipes.forEach(recipe => { %>
-        <li>
+        <div class="recipe-tile">
           <h2><%= recipe.title %></h2>
-            <p><strong>Ingredients:</strong></p>
-            <ul>
-              <% recipe.ingredients.replace(/["[\]]/g, '').split(',').forEach(ingredient => { %>
+          <p><strong>Ingredients:</strong></p>
+          <ul>
+            <% recipe.ingredients.replace(/["[\]]/g, '').split(',').forEach(ingredient => { %>
               <li>&#8226; <%= ingredient.trim() %></li>
-              <% }); %>
-            </ul>
-            <p><strong>Instructions:</strong> <%- recipe.instructions %></p>
-        </li>
-        <form action="/recipes/delete-recipe" method="POST">
-          <input type="hidden" name="recipeId" value="<%= recipe.recipe_id %>">
-          <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
+            <% }); %>
+          </ul>
+          <p><strong>Instructions:</strong></p>
+          <p><%- recipe.instructions %></p>
+          <form action="/recipes/delete-recipe" method="POST">
+            <input type="hidden" name="recipeId" value="<%= recipe.recipe_id %>">
+            <button type="submit">Delete</button>
+          </form>
+        </div>
       <% }); %>
     <% } else { %>
       <p>You haven't saved any recipes yet.</p>
     <% } %>
-  </ul>
+  </div>
   
-  <a href="/recipes/api-recipes">Add a Recipe</a>
+  <a href="/recipes/api-recipes" class="add-recipe">Add a Recipe</a>
 </body>
 </html>

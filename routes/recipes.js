@@ -154,35 +154,52 @@ router.get('/api-recipes', async (req, res) => {
     const userId = req.session.userId;
     const recipeId = global_recipe_id;
 
-    // get the recipe details from the API
-    const response = await axios.get(RECIPE_URL.replace('{id}', recipeId), {
-        params: {
-            apiKey: API_KEY
-        }
-    });
-
-    const recipe = response.data;
-
-    // Extract the required information
-    const recipeDetails = {
-        id: recipe.id,
-        title: recipe.title,
-        ingredients: recipe.extendedIngredients.map(ingredient => ingredient.original),
-        instructions: recipe.instructions
-    };
-
-    // Save the recipe to the database
+    // Check if the recipe is already in the database
     db.query(
-        'INSERT INTO Recipes (user_id, recipe_id, title, ingredients, instructions) VALUES (?, ?, ?, ?, ?)',
-        [userId, recipeDetails.id, recipeDetails.title, JSON.stringify(recipeDetails.ingredients), recipeDetails.instructions],
-        (err) => {
+      'SELECT * FROM Recipes WHERE user_id = ? AND recipe_id = ?',
+      [userId, recipeId],
+      async (err, results) => {
+        if (err) {
+          console.error('Error checking recipe:', err);
+          return res.status(500).send('An error occurred while checking the recipe.');
+        }
+
+        if (results.length > 0) {
+          // Recipe already exists
+            return res.send('Recipe already saved. <a href="/recipes/api-recipes">Go back to search</a>');
+        }
+
+        // get the recipe details from the API
+        const response = await axios.get(RECIPE_URL.replace('{id}', recipeId), {
+          params: {
+            apiKey: API_KEY
+          }
+        });
+
+        const recipe = response.data;
+
+        // Extract the required information
+        const recipeDetails = {
+          id: recipe.id,
+          title: recipe.title,
+          ingredients: recipe.extendedIngredients.map(ingredient => ingredient.original),
+          instructions: recipe.instructions
+        };
+
+        // Save the recipe to the database
+        db.query(
+          'INSERT INTO Recipes (user_id, recipe_id, title, ingredients, instructions) VALUES (?, ?, ?, ?, ?)',
+          [userId, recipeDetails.id, recipeDetails.title, JSON.stringify(recipeDetails.ingredients), recipeDetails.instructions],
+          (err) => {
             if (err) {
-                console.error('Error saving recipe:', err);
-                return res.status(500).send('An error occurred while saving the recipe.');
+              console.error('Error saving recipe:', err);
+              return res.status(500).send('An error occurred while saving the recipe.');
             }
 
             res.redirect('/recipes/my-recipes');
-        }
+          }
+        );
+      }
     );
   });
   // router to post delete button
