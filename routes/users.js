@@ -100,7 +100,7 @@ router.post('/login', [
             // Assuming you have session management (e.g., express-session)
             req.session.userId = user.user_id;
 
-            res.redirect('/'); // Redirect to the home page
+            res.redirect('../'); // Redirect to the home page
         });
     } catch (err) {
         next(err);

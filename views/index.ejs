@@ -1,14 +1,14 @@
 <!doctype html>
 <html>
   <head>
-    <title>Welcome to <%=shopData.shopName%></title>
+    <title>Welcome to <%= webData.webName%></title>
     <link rel="stylesheet"  type="text/css" href="/main.css" />
   </head>
   <body>
     <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
 
-    <h1>Welcome to <%=shopData.shopName%></h1>
-    <p><a href="/about">About <%=shopData.shopName%></a></p>
+    <h1>Welcome to <%= webData.webName%></h1>
+    <p><a href="/about">About <%= webData.webName%></a></p>
     <p><a href="/users/login">Login</a></p>
     <p><a href="/users/register">Register</a></p>
     <p><a href="../recipes/search">Search</a></p>

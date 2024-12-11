@@ -10,7 +10,7 @@
   <!-- Include Navbar -->
   <%- include('partials/navbar') %>
 
-  <h1>Search Recipes</h1>
+  <h1>Search <%= webData.webName%></h1>
   <form action="search_result" method="GET">
     <input type="text" name="query" placeholder="Search for a recipe" required>
     <button type="submit">Search</button>
