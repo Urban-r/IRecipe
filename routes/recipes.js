@@ -196,7 +196,7 @@ router.get('/api-recipes', async (req, res) => {
               return res.status(500).send('An error occurred while saving the recipe.');
             }
 
-            res.redirect('/my-recipes');
+            res.redirect('../recipes/my-recipes');
           }
         );
       }
