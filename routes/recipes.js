@@ -217,7 +217,7 @@ router.get('/api-recipes', async (req, res) => {
           return res.status(500).send('An error occurred while deleting the recipe.');
         }
   
-        res.redirect('/recipes/my-recipes');
+        res.redirect('../recipes/my-recipes');
       }
     );
   });
