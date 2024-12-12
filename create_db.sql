@@ -1,5 +1,5 @@
 # Create database script for irecipe
-
+drop database if exists irecipe;
 # Create the database
 CREATE DATABASE IF NOT EXISTS irecipe;
 USE irecipe;
@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS Users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    api_key VARCHAR(255) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE IF NOT EXISTS Recipes (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,

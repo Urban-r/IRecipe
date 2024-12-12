@@ -75,10 +75,13 @@ app.use('/', mainRoutes)
 const usersRoutes = require('./routes/users')
 app.use('/users', usersRoutes)
 
-// Load the route handlers for /books
+// Load the route handlers for /recipes
 const recipesRoutes = require('./routes/recipes')
 app.use('/recipes', recipesRoutes)
 
+// Load the route handlers for /api
+const apiRoutes = require('./routes/api')
+app.use('/api', apiRoutes)
 
 // Start the web app listening
 app.listen(port, () => console.log(`Node app listening on port ${port}!`))

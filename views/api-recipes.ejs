@@ -8,26 +8,28 @@
 </head>
 <body>
   <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
-  <h1>Search for Recipes</h1>
-  <form action="../recipes/api-recipes" method="GET">
-    <input type="text" name="query" placeholder="Search recipes..." required>
-    <button type="submit">Search</button>
-  </form>
+  <main>
+    <h1>Search for Recipes</h1>
+    <form action="../recipes/api-recipes" method="GET">
+      <input type="text" name="query" placeholder="Search recipes..." required>
+      <button type="submit">Search</button>
+    </form>
 
-  <% if (recipes && recipes.length > 0) { %>
-    <h2>Search Results</h2>
-    <ul>
-      <% recipes.forEach(recipe => { %>
-        <li>
+    <% if (recipes && recipes.length > 0) { %>
+      <h2>Search Results</h2>
+      <div class="recipe-grid">
+        <% recipes.forEach(recipe => { %>
+          <div class="recipe-tile">
             <h3><a href="/recipes/<%= recipe.id %>" target="_blank"><%= recipe.title %></a></h3>
-            <img src="<%= recipe.image %>" alt="<%= recipe.title %>" width="100">
-            <p><%= recipe.summary %></p>
-        </li>
-      <% }) %>
-    </ul>
-  <% } else if (recipes) { %>
-    <p>No recipes found. Please try again.</p>
-  <% } %>
+            <img src="<%= recipe.image %>" alt="<%= recipe.title %>" class="recipe-image">
+            <p class="recipe-summary"><%= recipe.summary %></p>
+          </div>
+        <% }) %>
+      </div>
+    <% } else if (recipes) { %>
+      <p>No recipes found. Please try again.</p>
+    <% } %>
 
+  </main>
 </body>
 </html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+    <link rel="stylesheet" type="text/css" href="/profile.css" />
+</head>
+<body>
+    <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
+
+
+    <div class="container">
+        <h1>Your Profile</h1>
+        
+        <div class="api-key-container">
+            <h2>Your API Key</h2>
+            <div class="api-key">
+                <%= apiKey %>
+            </div>
+        </div>
+        
+        <a href="/api/recipes?api_key=<%= apiKey %>" class="btn">View Your Recipes in JSON</a>
+    </div>
+
+</body>
+</html>

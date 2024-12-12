@@ -2,6 +2,7 @@
 const express = require("express")
 const router = express.Router()
 const bcrypt = require('bcrypt')
+const crypto = require('crypto')
 const saltRounds = 10
 const User = require('../models/user'); // User model
 const { check, validationResult } = require('express-validator');
@@ -13,6 +14,11 @@ const redirectLogin = (req, res, next) => {
         next (); // move to the next middleware function
     } 
 }
+
+// Function to generate a random API key
+function generateApiKey() {
+    return crypto.randomBytes(32).toString('hex');
+  }
 
 
 router.get('/register', function (req, res, next) {
@@ -26,10 +32,11 @@ router.post('/register', [
 ], async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+        return res.redirect('./register');
+        }
 
     const { name, email, password } = req.body;
+    const apiKey = generateApiKey();
 
     try {
         // Check if the email is already registered
@@ -37,20 +44,14 @@ router.post('/register', [
             if (err) return next(err);
 
             if (result.length > 0) {
-                return res.status(400).json({ error: 'Email is already registered' });
+                return res.send('Email is already registered' + '<a href='+'/users/register'+'>Try again</a>');
             }
 
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, saltRounds);
 
             // Insert the new user into the database
-            const sqlQuery = `
-                INSERT INTO Users (name, email, password_hash) 
-                VALUES (?, ?, ?)
-            `;
-            const values = [name, email, hashedPassword];
-            db.query(sqlQuery, values, (err, result) => {
-                if (err) return next(err);
+            await User.createUser(name, email, hashedPassword, apiKey).then(() => {
 
                 res.redirect('../users/login');
             });
@@ -63,45 +64,37 @@ router.post('/register', [
 router.get('/login', function (req, res, next) {
     res.render('login.ejs')                                                               
 })
-// Handle login
-/**
- * Login a user
- */
+
 router.post('/login', [
     check('email').isEmail().withMessage('Invalid email address'),
     check('password').notEmpty().withMessage('Password is required'),
 ], async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.render('login', {
-            errors: errors.array()  // Pass errors to EJS view
-        });
+        return res.send('Invalid email or password' + '<a href='+'/users/login'+'>Try again</a>');
     }
 
     const { email, password } = req.body;
 
     try {
         // Check if the user exists
-        db.query('SELECT * FROM Users WHERE email = ?', [email], async (err, result) => {
-            if (err) return next(err);
+        const result = await User.findUserByEmail(email);
 
-            if (result.length === 0) {
-                return res.send('Invalid email or password');
-                        }
+        if (result.length === 0) {
+            return res.send('Invalid email or password' + '<a href='+'/users/login'+'>Try again</a>');
+                    }
 
-            const user = result[0];
+        const user = result[0];
 
-            // Compare the provided password with the hashed password
-            const match = await bcrypt.compare(password, user.password_hash);
-            if (!match) {
-                return res.send('Invalid email or password');
-            }
+        // Compare the provided password with the hashed password
+        const match = await bcrypt.compare(password, user.password_hash);
+        if (!match) {
+            return res.send('Invalid email or password' + '<a href='+'/users/login'+'>Try again</a>');
+        }
 
-            // Assuming you have session management (e.g., express-session)
-            req.session.userId = user.user_id;
+        req.session.userId = user.user_id;
 
-            res.redirect('../'); // Redirect to the home page
-        });
+        res.redirect('../'); // Redirect to the home page
     } catch (err) {
         next(err);
     }
@@ -115,6 +108,22 @@ router.get('/logout', redirectLogin, (req,res) => {
     res.send('you are now logged out. <a href='+'/'+'>Home</a>');
     })
 })
+
+// Route to display the user's API key
+router.get('/profile',redirectLogin, async (req, res) => {
+    const userId = req.session.userId; // Get userId from session
+
+    // Query the Users table to get the user's API key
+    const result = await User.getApiKeyByUserId(userId);
+  
+    if (result.length === 0) {
+        return res.status(404).send('User not found.');
+    }
+
+    const apiKey = result[0].api_key;
+    
+    res.render('profile.ejs', { apiKey: apiKey });
+      });
 
 // Export the router object so index.js can access it
 module.exports = router

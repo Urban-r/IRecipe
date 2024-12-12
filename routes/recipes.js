@@ -1,7 +1,6 @@
 const express = require("express")
-const axios = require('axios'); // For making API requests
+const axios = require('axios'); 
 const router = express.Router()
-const User = require('../models/user'); // User model
 const { check, validationResult } = require('express-validator');
 
 // Spoonacular API key and base URL
@@ -19,17 +18,6 @@ const redirectLogin = (req, res, next) => {
 }
 
 // Handle our routes
-
-router.get('/list', redirectLogin, function(req, res, next) {
-    let sqlquery = "SELECT * FROM Recipes" // query database to get all the books
-    // execute sql query
-    db.query(sqlquery, (err, result) => {
-        if (err) {
-            next(err)
-        }
-        res.render("list.ejs", {availableRecipe:result})
-     })
-})
 
 router.get('/search', redirectLogin, function(req, res, next) {
     res.render('search.ejs', { recipes: [], query: '' });
@@ -122,7 +110,6 @@ router.get('/api-recipes', async (req, res) => {
     console.log(recipeId);
     
     try {
-        // Make an API request to Spoonacular to get detailed recipe information
         const response = await axios.get(RECIPE_URL.replace('{id}', recipeId), {
             params: {
                 apiKey: API_KEY
@@ -221,7 +208,35 @@ router.get('/api-recipes', async (req, res) => {
       }
     );
   });
+
+  router.get('/api', (req, res) => {
+    const userId = req.session.userId; 
   
+    if (!userId) {
+      return res.redirect('../users/login'); // Redirect to login if not authenticated
+    }
+  
+    // Query the database to fetch recipes for the logged-in user
+    db.query(
+      'SELECT * FROM Recipes WHERE user_id = ?',
+      [userId],
+      (err, rows) => { // Callback to handle the result or error
+        console.log(rows);
+        if (err) {
+          console.error('Error fetching recipes:', err);
+          return res.status(500).send('An error occurred while fetching your recipes.');
+        }
+  
+        // Check if any recipes were found
+        if (rows && rows.length > 0) {
+          res.json(rows);
+        } else {
+          res.json({ message: 'No recipes found.' });
+        }
+      }
+    );
+  });
+
     
 // Export the router object so index.js can access it
 module.exports = router
