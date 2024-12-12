@@ -51,7 +51,7 @@ body {
   /* Smaller Boxes (Saved Recipes and Other Links) */
   .navbar ul li p a {
     font-size: 0.75rem; /* Smaller text for these links */
-    padding: 0.25rem 0.5rem; /* Consistent with other items */
+    padding: 0.25rem 0.5rem; 
     margin: 0;
   }
   
