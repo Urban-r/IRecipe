@@ -1,5 +1,4 @@
 # Create database script for irecipe
-drop database if exists irecipe;
 # Create the database
 CREATE DATABASE IF NOT EXISTS irecipe;
 USE irecipe;
