@@ -65,7 +65,7 @@ global.db = db;
 
 
 // Define our application-specific data
-app.locals.webData = {webName: "IRecipe"}
+app.locals.webData = {webName: "iRecipe"}
 
 // Load the route handlers
 const mainRoutes = require("./routes/main")
