@@ -14,7 +14,6 @@
       <input type="text" name="query" placeholder="Search recipes..." required>
       <button type="submit">Search</button>
     </form>
-
     <% if (recipes && recipes.length > 0) { %>
       <h2>Search Results</h2>
       <div class="recipe-grid">
@@ -29,7 +28,6 @@
     <% } else if (recipes) { %>
       <p>No recipes found. Please try again.</p>
     <% } %>
-
   </main>
 </body>
 </html>

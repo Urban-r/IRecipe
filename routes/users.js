@@ -27,13 +27,16 @@ router.get('/register', function (req, res, next) {
 
 router.post('/register', [
     check('email').isEmail().withMessage('Invalid email address'),
-    check('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
+    check('password')
+        .isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+        .matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+        .matches(/\d/).withMessage('Password must contain at least one number'),
     check('name').notEmpty().withMessage('Name is required'),
 ], async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.redirect('./register');
-        }
+        return res.send('Invalid input. <a href="/users/register">Try again</a>');
+    }
 
     const { name, email, password } = req.body;
     const apiKey = generateApiKey();
@@ -44,7 +47,7 @@ router.post('/register', [
             if (err) return next(err);
 
             if (result.length > 0) {
-                return res.send('Email is already registered' + '<a href='+'/users/register'+'>Try again</a>');
+                return res.send('Email is already registered. <a href="/users/register">Try again</a>');
             }
 
             // Hash the password
@@ -52,7 +55,6 @@ router.post('/register', [
 
             // Insert the new user into the database
             await User.createUser(name, email, hashedPassword, apiKey).then(() => {
-
                 res.redirect('../users/login');
             });
         });

@@ -9,7 +9,6 @@ const expressSanitizer = require('express-sanitizer');
 //Import mysql module
 var mysql = require('mysql2')
 
-
 // Create the express application object
 const app = express()
 const port = 8000
@@ -42,7 +41,6 @@ app.use((req, res, next) => {
     next();
   });
 
-
 // Define the database connection
 const db = mysql.createConnection ({
     host: 'localhost',
@@ -61,8 +59,6 @@ db.connect((err) => {
     console.log('Connected to database')
 })
 global.db = db;
-
-
 
 // Define our application-specific data
 app.locals.webData = {webName: "iRecipe"}

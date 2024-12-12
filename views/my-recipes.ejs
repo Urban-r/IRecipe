@@ -8,7 +8,6 @@
 </head>
 <body>
     <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
-
   <h1>My Saved Recipes</h1>
   <div class="recipe-tiles">
     <% if (recipes.length > 0) { %>
@@ -33,7 +32,6 @@
       <p>You haven't saved any recipes yet.</p>
     <% } %>
   </div>
-  
   <a href="/recipes/api-recipes" class="add-recipe">Add a Recipe</a>
 </body>
 </html>

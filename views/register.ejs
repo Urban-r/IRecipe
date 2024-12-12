@@ -3,11 +3,9 @@
 <head>
     <title><%= webData.webName%></title>
     <link rel="stylesheet"  type="text/css" href="/main.css" />
-
 </head>
 <body>
     <%- include('partials/navbar') %> <!-- Include Navbar Partial -->
-    
     <h1>Register</h1>
     <form action="/users/register" method="POST">
         <label for="name">Username:</label>

@@ -34,7 +34,6 @@ router.get('/search_result', (req, res) => {
           console.error('Error:', error);
           return res.status(500).send('An error occurred while searching for recipes.');
         }
-  
         // Render the search.ejs page with the results
         res.render('search.ejs', { recipes: results, query });
       }
@@ -69,7 +68,6 @@ router.get('/search_result', (req, res) => {
     );
   });
 
-  
 // Route to handle search
 router.get('/api-recipes', async (req, res) => {
   const query = req.query.query || 'Please enter a search term.'; // Get the query from the search form
@@ -112,7 +110,7 @@ router.get('/api-recipes', async (req, res) => {
     try {
         const response = await axios.get(RECIPE_URL.replace('{id}', recipeId), {
             params: {
-                apiKey: API_KEY
+              apiKey: API_KEY
             }
         });
     
@@ -182,13 +180,13 @@ router.get('/api-recipes', async (req, res) => {
               console.error('Error saving recipe:', err);
               return res.status(500).send('An error occurred while saving the recipe.');
             }
-
             res.redirect('../recipes/my-recipes');
           }
         );
       }
     );
   });
+
   // router to post delete button
   router.post('/delete-recipe', redirectLogin, (req, res) => {
     const userId = req.session.userId;
@@ -203,7 +201,6 @@ router.get('/api-recipes', async (req, res) => {
           console.error('Error deleting recipe:', err);
           return res.status(500).send('An error occurred while deleting the recipe.');
         }
-  
         res.redirect('../recipes/my-recipes');
       }
     );
@@ -226,7 +223,6 @@ router.get('/api-recipes', async (req, res) => {
           console.error('Error fetching recipes:', err);
           return res.status(500).send('An error occurred while fetching your recipes.');
         }
-  
         // Check if any recipes were found
         if (rows && rows.length > 0) {
           res.json(rows);
