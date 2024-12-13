@@ -11,9 +11,8 @@ body {
  /* Navbar Styling */
  .navbar {
     background-color: #4CAF50;
-    padding: 0.25rem 0.5rem; /* Smaller padding */
-    position: sticky;
-    top: 0;
+    padding: 0.25rem 0.5rem; 
+    position: static;
     z-index: 1000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
@@ -84,7 +83,7 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 45%;
-    max-width: 150px;
+    max-width: 300px;
   }
   
   ul li h2, h3 {
