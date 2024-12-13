@@ -40,12 +40,8 @@ router.get('/search_result', (req, res) => {
     );
   });
 
-  router.get('/my-recipes', (req, res) => {
+  router.get('/my-recipes', redirectLogin, (req, res) => {
     const userId = req.session.userId; // Get userId from session
-  
-    if (!userId) {
-      return res.redirect('../users/login'); // Redirect to login if not authenticated
-    }
   
     // Query the database to fetch recipes for the logged-in user
     db.query(

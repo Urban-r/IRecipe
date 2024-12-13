@@ -24,10 +24,13 @@
           <li>
             <h3><%= recipe.title %></h3>
             <% if (recipe.ingredients) { %>
-              <p><strong>Ingredients:</strong> <%= recipe.ingredients %></p>
-            <% } %>
+              <% if (Array.isArray(recipe.ingredients)) { %>
+                <p><strong>Ingredients:</strong> <%= recipe.ingredients.join(', ') %></p>
+              <% } else if (recipe.ingredients) { %>
+                <p><strong>Ingredients:</strong> <%= recipe.ingredients.replace(/[\[\]"]/g, '').replace(/,/g, ', ') %></p>
+              <% } %>            <% } %>
             <% if (recipe.instructions) { %>
-              <p><strong>Instructions:</strong> <%= recipe.instructions %></p>
+              <p><strong>Instructions:</strong> <%- recipe.instructions %></p>
             <% } %>
           </li>
         <% }); %>
