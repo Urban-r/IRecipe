@@ -42,7 +42,7 @@ app.use((req, res, next) => {
   });
 
 // Define the database connection
-const db = mysql.createConnection ({
+const db = mysql.createPool ({
     host: 'localhost',
     user: 'irecipe_app',
     password: 'qwertyuiop',
@@ -52,11 +52,13 @@ const db = mysql.createConnection ({
     queueLimit: 0,
 })
 // Connect to the database
-db.connect((err) => {
+db.getConnection((err, connection) => {
     if (err) {
-        throw err
+        console.error('Error connecting to database: ' + err.stack)
+        return
     }
-    console.log('Connected to database')
+    console.log('Connected to database.')
+    connection.release()
 })
 global.db = db;
 
