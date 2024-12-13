@@ -25,5 +25,14 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Urban-r/IRecipe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Urban-r/IRecipe/issues"
+  },
+  "homepage": "https://github.com/Urban-r/IRecipe#readme"
 }
